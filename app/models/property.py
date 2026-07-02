@@ -11,3 +11,5 @@ class Property(db.Model):
     current_value = db.Column(db.Float)
 
     created_at = db.Column(db.DateTime, server_default=db.func.now())
+    def __repr__(self):
+        return f"<property {self.name}>" 
