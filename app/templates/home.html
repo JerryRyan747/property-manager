@@ -4,6 +4,74 @@
 
 <h1>Property Portfolio</h1>
 
+<div class="row mb-4">
+
+    <div class="col-md-3">
+
+        <div class="card text-center">
+
+            <div class="card-body">
+
+                <h5>Total Properties</h5>
+
+                <h2>{{ summary.total_properties }}</h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-3">
+
+        <div class="card text-center">
+
+            <div class="card-body">
+
+                <h5>Portfolio Value</h5>
+
+                <h2>£{{ "{:,.0f}".format(summary.total_value) }}</h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-3">
+
+        <div class="card text-center">
+
+            <div class="card-body">
+
+                <h5>Average Price</h5>
+
+                <h2>£{{ "{:,.0f}".format(summary.average_price) }}</h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-3">
+
+        <div class="card text-center">
+
+            <div class="card-body">
+
+                <h5>Latest</h5>
+
+                <p>{{ summary.latest }}</p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
 <form action="{{ url_for('main.add_property') }}" method="POST" class="mb-4">
 
     <div class="mb-3">
