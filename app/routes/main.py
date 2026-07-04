@@ -42,29 +42,69 @@ def home():
 
 @main.route("/add-property", methods=["POST"])
 
-
 def add_property():
 
+    current_value = request.form.get("current_value")
 
     property = Property(
 
-
         name=request.form["name"],
-
 
         address=request.form["address"],
 
+        purchase_price=float(request.form["purchase_price"]),
 
-        purchase_price=float(request.form["purchase_price"])
-
+        current_value=float(current_value) if current_value else None
 
     )
 
-
     db.session.add(property)
-
 
     db.session.commit()
 
-
     return redirect(url_for("main.home"))
+
+
+@main.route("/property/<int:property_id>/edit", methods=["GET", "POST"])
+
+
+def edit_property(property_id):
+
+
+    property = Property.query.get_or_404(property_id)
+
+
+    if request.method == "POST":
+
+
+        property.name = request.form["name"]
+
+
+        property.address = request.form["address"]
+
+
+        property.purchase_price = float(request.form["purchase_price"])
+
+
+        current_value = request.form.get("current_value")
+
+
+        property.current_value = float(current_value) if current_value else None
+
+
+        db.session.commit()
+
+
+        return redirect(url_for("main.home"))
+
+
+    return render_template(
+
+
+        "edit_property.html",
+
+
+        property=property
+
+
+    )
