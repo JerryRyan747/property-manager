@@ -55,7 +55,6 @@ def add_property():
         purchase_price=float(request.form["purchase_price"]),
 
         current_value=float(current_value) if current_value else None
-
     )
 
     db.session.add(property)
@@ -63,7 +62,7 @@ def add_property():
     db.session.commit()
 
     return redirect(url_for("main.home"))
-
+    
 
 @main.route("/property/<int:property_id>/edit", methods=["GET", "POST"])
 
@@ -106,5 +105,20 @@ def edit_property(property_id):
 
         property=property
 
-
     )
+
+
+@main.route("/property/<int:property_id>/delete")
+
+def delete_property(property_id):
+
+    property = Property.query.get_or_404(property_id)
+
+    db.session.delete(property)
+
+    db.session.commit()
+
+    return redirect(url_for("main.home"))
+
+
+    
