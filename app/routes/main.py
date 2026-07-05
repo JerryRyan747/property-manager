@@ -15,27 +15,33 @@ main = Blueprint("main", __name__)
 
 @main.route("/")
 
-
 def home():
 
+    search = request.args.get("search", "")
 
-    properties = Property.query.order_by(Property.name).all()
+    query = Property.query
 
+    if search:
+
+        query = query.filter(
+
+            (Property.name.contains(search)) |
+
+            (Property.address.contains(search))
+
+        )
+
+    properties = query.order_by(Property.name).all()
 
     summary = portfolio_summary()
 
-
     return render_template(
-
 
         "home.html",
 
-
         properties=properties,
 
-
         summary=summary
-
 
     )
 
