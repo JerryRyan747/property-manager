@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for
+from flask import Blueprint, render_template, request, redirect, url_for, flash
 
 
 from app.extensions import db
@@ -60,6 +60,7 @@ def add_property():
     db.session.add(property)
 
     db.session.commit()
+    flash("Property added successfully!", "success")
 
     return redirect(url_for("main.home"))
     
@@ -92,7 +93,7 @@ def edit_property(property_id):
 
 
         db.session.commit()
-
+        flash("Property updated successfully!", "success")
 
         return redirect(url_for("main.home"))
 
@@ -117,7 +118,7 @@ def delete_property(property_id):
     db.session.delete(property)
 
     db.session.commit()
-
+    flash("Property deleted successfully!", "success")
     return redirect(url_for("main.home"))
 
 

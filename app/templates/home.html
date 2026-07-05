@@ -130,6 +130,32 @@
 
 <hr>
 
+<form method="GET" action="{{ url_for('main.home') }}" class="mb-4">
+
+    <div class="input-group">
+
+        <input
+
+            type="text"
+
+            class="form-control"
+
+            name="search"
+
+            placeholder="Search by name or address..."
+
+            value="{{ request.args.get('search', '') }}">
+
+        <button class="btn btn-outline-primary" type="submit">
+
+            Search
+
+        </button>
+
+    </div>
+
+</form>
+
 <h2>Properties</h2>
 
 {% if properties %}
