@@ -60,98 +60,6 @@ Dashboard
     </div>
 </div>
 
-
-<div class="mb-4 text-end">
-
-    <button class="btn btn-primary"
-            data-bs-toggle="modal"
-            data-bs-target="#addPropertyModal">
-        Add Property
-    </button>
-
-</div>
-
-<div class="modal fade"
-     id="addPropertyModal"
-     tabindex="-1"
-     aria-hidden="true">
-
-    <div class="modal-dialog">
-
-        <div class="modal-content">
-
-            <form method="POST"
-                  action="{{ url_for('main.add_property') }}">
-
-                <div class="modal-header">
-                    <h5 class="modal-title">Add Property</h5>
-
-                    <button type="button"
-                            class="btn-close"
-                            data-bs-dismiss="modal">
-                    </button>
-                </div>
-
-                <div class="modal-body">
-
-                    <div class="mb-3">
-                        <label class="form-label">Property Name</label>
-                        <input type="text"
-                               class="form-control"
-                               name="name"
-                               required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Address</label>
-                        <input type="text"
-                               class="form-control"
-                               name="address"
-                               required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Purchase Price</label>
-                        <input type="number"
-                               step="0.01"
-                               class="form-control"
-                               name="purchase_price"
-                               required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Current Value</label>
-                        <input type="number"
-                               step="0.01"
-                               class="form-control"
-                               name="current_value">
-                    </div>
-
-                </div>
-
-                <div class="modal-footer">
-
-                    <button type="button"
-                            class="btn btn-secondary"
-                            data-bs-dismiss="modal">
-                        Cancel
-                    </button>
-
-                    <button type="submit"
-                            class="btn btn-primary">
-                        Save Property
-                    </button>
-
-                </div>
-
-            </form>
-
-        </div>
-
-    </div>
-
-</div>
-
 <hr>
 
 <form method="GET"
@@ -299,7 +207,17 @@ if (ctx) {
 
         options: {
 
-            responsive: true
+            responsive: true,
+
+            plugins: {
+
+                legend: {
+
+                    display: true
+
+                }
+
+            }
 
         }
 

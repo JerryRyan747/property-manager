@@ -11,5 +11,11 @@ class Property(db.Model):
     current_value = db.Column(db.Float)
 
     created_at = db.Column(db.DateTime, server_default=db.func.now())
+    @property
+    def gain_loss(self):
+        if self.current_value is None:
+            return None
+        return self.current_value -  self.purchase_price
+
     def __repr__(self):
         return f"<property {self.name}>" 

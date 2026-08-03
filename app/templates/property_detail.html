@@ -1,0 +1,164 @@
+{% extends "base.html" %}
+{% block title%}
+{{ property.name }}
+{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+    <h1>{{ property.name }}</h1>
+
+    <a href="{{ url_for('main.home') }}" class="btn btn-secondary">
+
+        ← Back to Portfolio
+
+    </a>
+
+</div>
+
+<div class="card">
+
+    <div class="card-body">
+
+        <table class="table">
+
+            <tr>
+
+                <th width="30%">Name</th>
+
+                <td>{{ property.name }}</td>
+
+            </tr>
+
+            <tr>
+
+                <th>Address</th>
+
+                <td>{{ property.address }}</td>
+
+            </tr>
+
+            <tr>
+
+                <th>Purchase Price</th>
+
+                <td>£{{ "{:,.2f}".format(property.purchase_price) }}</td>
+
+            </tr>
+
+            <tr>
+
+                <th>Current Value</th>
+
+                <td>
+
+                    {% if property.current_value %}
+
+                        £{{ "{:,.2f}".format(property.current_value) }}
+
+                    {% else %}
+
+                        —
+
+                    {% endif %}
+
+                </td>
+
+            </tr>
+
+
+            <tr>
+
+
+                <th>Gain / Loss</th>
+
+
+                <td>
+
+
+                    {% if property.gain_loss is not none %}
+
+
+                        {% if property.gain_loss >= 0 %}
+
+
+                            <span class="text-success">
+
+
+                                +£{{ "{:,.2f}".format(property.gain_loss) }}
+
+
+                            </span>
+
+
+                        {% else %}
+
+
+                            <span class="text-danger">
+
+
+                                £{{ "{:,.2f}".format(property.gain_loss) }}
+
+
+                            </span>
+
+
+                        {% endif %}
+
+
+                    {% else %}
+
+
+                        —
+
+
+                    {% endif %}
+
+
+                </td>
+
+
+            </tr>
+
+            <tr>
+
+                <th>Date Added</th>
+
+                <td>{{ property.created_at }}</td>
+
+            </tr>
+
+        </table>
+
+    </div>
+
+</div>
+
+<div class="mt-3">
+
+    <a href="{{ url_for('main.edit_property',
+
+                        property_id=property.id) }}"
+
+       class="btn btn-warning">
+
+        Edit Property
+
+    </a>
+
+    <a href="{{ url_for('main.delete_property',
+
+                        property_id=property.id) }}"
+
+       class="btn btn-danger"
+
+       onclick="return confirm('Delete this property?');">
+
+        Delete
+
+    </a>
+
+</div>
+
+{% endblock %}

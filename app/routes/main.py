@@ -44,7 +44,19 @@ def home():
         summary=summary
 
     )
+@main.route("/property/<int:property_id>")
 
+def property_detail(property_id):
+
+    property = Property.query.get_or_404(property_id)
+
+    return render_template(
+
+        "property_detail.html",
+
+        property=property
+
+    )
 
 @main.route("/add-property", methods=["POST"])
 
