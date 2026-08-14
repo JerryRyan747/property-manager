@@ -10,7 +10,7 @@ Dashboard
 
 <div class="row mb-4">
 
-    <div class="col-md-3">
+    <div class="col-md-2">
         <div class="card text-center shadow-sm">
             <div class="card-body">
                 <h6 class="text-muted">Properties</h6>
@@ -19,7 +19,7 @@ Dashboard
         </div>
     </div>
 
-    <div class="col-md-3">
+    <div class="col-md-2">
         <div class="card text-center shadow-sm">
             <div class="card-body">
                 <h6 class="text-muted">Purchase Total</h6>
@@ -30,7 +30,7 @@ Dashboard
         </div>
     </div>
 
-    <div class="col-md-3">
+    <div class="col-md-2">
         <div class="card text-center shadow-sm">
             <div class="card-body">
                 <h6 class="text-muted">Current Value</h6>
@@ -41,7 +41,7 @@ Dashboard
         </div>
     </div>
 
-    <div class="col-md-3">
+    <div class="col-md-2">
         <div class="card text-center shadow-sm">
             <div class="card-body">
                 <h6 class="text-muted">Gain / Loss</h6>
@@ -51,6 +51,28 @@ Dashboard
             </div>
         </div>
     </div>
+
+    <div class="col-md-2">
+    <div class="card text-center shadow-sm">
+        <div class="card-body">
+            <h6 class="text-muted">Annual Rent</h6>
+            <h3>
+                £{{ "{:,.0f}".format(summary.total_annual_rent) }}
+            </h3>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-2">
+    <div class="card text-center shadow-sm">
+        <div class="card-body">
+            <h6 class="text-muted">Average Yield</h6>
+            <h3>
+                {{ "%.2f"|format(summary.average_yield) }}%
+            </h3>
+        </div>
+    </div>
+</div>
 
 </div>
 
@@ -134,6 +156,7 @@ Dashboard
                                 name="annual_rent">
                     </div>
 
+                    
                 </div>
 
                 <div class="modal-footer">

@@ -17,14 +17,23 @@ def portfolio_summary():
     )
 
     total_gain = total_current - total_purchase
+    total_annual_rent = sum(
+    p.annual_rent if p.annual_rent else 0
+    for p in properties
+    )
 
+    average_yield = (
+    (total_annual_rent / total_current) * 100
+    if total_current else 0
+    )
+    
     average_price = (
 
         total_purchase / total_properties
 
         if total_properties else 0
-
     )
+
 
     latest = properties[-1].name if properties else "None"
 
@@ -38,7 +47,11 @@ def portfolio_summary():
 
         "total_gain": total_gain,
 
+        "total_annual_rent": total_annual_rent,
+
         "average_price": average_price,
+
+        "average_yield": average_yield,
 
         "latest": latest
 
