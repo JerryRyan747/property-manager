@@ -10,6 +10,7 @@ class Property(db.Model):
     purchase_price = db.Column(db.Float, nullable=False)
     current_value = db.Column(db.Float)
     annual_rent = db.Column(db.Float)
+    mortgage_balance = db.Column(db.Float)
 
     created_at = db.Column(db.DateTime, server_default=db.func.now())
 

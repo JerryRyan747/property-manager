@@ -66,6 +66,39 @@ Dashboard
 <div class="col-md-2">
     <div class="card text-center shadow-sm">
         <div class="card-body">
+            <h6 class="text-muted">Total Mortgage</h6>
+            <h3>
+                £{{ "{:,.0f}".format(summary.total_mortgage) }}
+            </h3>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-2">
+    <div class="card text-center shadow-sm">
+        <div class="card-body">
+            <h6 class="text-muted">Total Equity</h6>
+            <h3>
+                £{{ "{:,.0f}".format(summary.total_equity) }}
+            </h3>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-2">
+    <div class="card text-center shadow-sm">
+        <div class="card-body">
+            <h6 class="text-muted">Portfolio LTV</h6>
+            <h3>
+                {{ "%.1f"|format(summary.portfolio_ltv) }}%
+            </h3>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-2">
+    <div class="card text-center shadow-sm">
+        <div class="card-body">
             <h6 class="text-muted">Average Yield</h6>
             <h3>
                 {{ "%.2f"|format(summary.average_yield) }}%
@@ -155,7 +188,13 @@ Dashboard
                                 class="form-control"
                                 name="annual_rent">
                     </div>
-
+                    <div class="mb-3">
+                        <label class="form-label">Mortgage Balance</label>
+                        <input type="number"
+                            step="0.01"
+                            class="form-control"
+                            name="mortgage_balance">
+                    </div>
                     
                 </div>
 
@@ -224,6 +263,8 @@ Dashboard
             <th>Current Value</th>
             <th>Annual Rent</th>
             <th>Yield %</th>
+            <th>Mortgage</th>
+            <th>Equity</th>
             <th>Actions</th>
 
         </tr>
@@ -273,7 +314,26 @@ Dashboard
                 {% else %}
                     —
                 {% endif %}
-        </td>
+            </td>
+            <td>
+                {% if property.mortgage_balance %}
+                £{{ "{:,.2f}".format(property.mortgage_balance) }}
+                {% else %}
+                    —
+                {% endif %}
+            </td>
+
+            <td>
+                {% if property.current_value %}
+                    £{{ "{:,.2f}".format(
+                        property.current_value -
+                        (property.mortgage_balance or 0)
+                    ) }}
+                {% else %}
+                    —
+                {% endif %}
+            </td>
+
 
             <td>
 

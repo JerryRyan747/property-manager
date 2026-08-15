@@ -26,6 +26,19 @@ def portfolio_summary():
     (total_annual_rent / total_current) * 100
     if total_current else 0
     )
+
+    total_mortgage = sum(
+    p.mortgage_balance if p.mortgage_balance else 0
+    for p in properties
+    )
+
+    total_equity = total_current - total_mortgage
+
+    portfolio_ltv = (
+    (total_mortgage / total_current) * 100
+    if total_current else 0
+    )
+
     
     average_price = (
 
@@ -52,6 +65,12 @@ def portfolio_summary():
         "average_price": average_price,
 
         "average_yield": average_yield,
+
+        "total_mortgage": total_mortgage,
+
+        "total_equity": total_equity,
+
+        "portfolio_ltv": portfolio_ltv,
 
         "latest": latest
 
