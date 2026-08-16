@@ -11,6 +11,7 @@ class Property(db.Model):
     current_value = db.Column(db.Float)
     annual_rent = db.Column(db.Float)
     mortgage_balance = db.Column(db.Float)
+    interest_rate = db.Column(db.Float)
 
     created_at = db.Column(db.DateTime, server_default=db.func.now())
 

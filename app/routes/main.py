@@ -65,6 +65,7 @@ def add_property():
     current_value = request.form.get("current_value")
     annual_rent = request.form.get("annual_rent")
     mortgage_balance = request.form.get("mortgage_balance")
+    interest_rate = request.form.get("interest_rate")
 
     property = Property(
 
@@ -78,7 +79,10 @@ def add_property():
 
         annual_rent=float(annual_rent) if annual_rent else None,
 
-        mortgage_balance=float(mortgage_balance) if mortgage_balance else None
+        mortgage_balance=float(mortgage_balance) if mortgage_balance else None,
+
+        interest_rate=float(interest_rate) if interest_rate else None
+     
     )
 
     db.session.add(property)
@@ -113,14 +117,14 @@ def edit_property(property_id):
         current_value = request.form.get("current_value")
         annual_rent = request.form.get("annual_rent")
         mortgage_balance = request.form.get("mortgage_balance")
+        interest_rate = request.form.get("interest_rate")
 
         property.current_value = float(current_value) if current_value else None
         property.annual_rent = float(annual_rent) if annual_rent else None
         property.mortgage_balance = float(mortgage_balance) if mortgage_balance else None
+        property.interest_rate = float(interest_rate) if interest_rate else None
 
         
-
-
         db.session.commit()
         flash("Property updated successfully!", "success")
 
