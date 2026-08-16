@@ -30,6 +30,13 @@ class Property(db.Model):
             self.mortgage_balance *
             self.interest_rate / 100
         )
+ 
+    @property
+    def net_rental_income(self):
+        if not self.annual_rent:
+            return 0
+
+        return self.annual_rent - self.annual_interest_cost
 
     def __repr__(self):
         return f"<Property {self.name}>"
