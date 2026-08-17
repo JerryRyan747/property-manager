@@ -39,6 +39,11 @@ def portfolio_summary():
     total_annual_rent - total_interest
     )
 
+    net_yield = (
+        (total_net_rental_income / total_current) * 100
+        if total_current else 0
+    )
+
     average_yield = (
     (total_annual_rent / total_current) * 100
     if total_current else 0
@@ -94,8 +99,10 @@ def portfolio_summary():
         "total_equity": total_equity,
 
         "total_interest": total_interest,
-        
+
         "total_net_rental_income": total_net_rental_income,
+
+        "net_yield": net_yield,
 
         "latest": latest
 
