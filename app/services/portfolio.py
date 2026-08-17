@@ -30,6 +30,15 @@ def portfolio_summary():
     for p in properties
     )
 
+    total_interest = sum(
+    p.annual_interest_cost
+    for p in properties
+    )
+
+    total_net_rental_income = (
+    total_annual_rent - total_interest
+    )
+
     average_yield = (
     (total_annual_rent / total_current) * 100
     if total_current else 0
@@ -81,8 +90,12 @@ def portfolio_summary():
         "portfolio_ltv": portfolio_ltv,
 
         "total_mortgage": total_mortgage,
-        
+
         "total_equity": total_equity,
+
+        "total_interest": total_interest,
+        
+        "total_net_rental_income": total_net_rental_income,
 
         "latest": latest
 

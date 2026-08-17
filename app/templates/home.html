@@ -66,6 +66,28 @@ Dashboard
 <div class="col-md-2">
     <div class="card text-center shadow-sm">
         <div class="card-body">
+            <h6 class="text-muted">Mortgage Interest</h6>
+            <h3>
+                £{{ "{:,.0f}".format(summary.total_interest) }}
+            </h3>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-2">
+    <div class="card text-center shadow-sm">
+        <div class="card-body">
+            <h6 class="text-muted">Net Rental Income</h6>
+            <h3>
+                £{{ "{:,.0f}".format(summary.total_net_rental_income) }}
+            </h3>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-2">
+    <div class="card text-center shadow-sm">
+        <div class="card-body">
             <h6 class="text-muted">Mortgage Debt</h6>
             <h3>
                 £{{ "{:,.0f}".format(summary.total_mortgage) }}
