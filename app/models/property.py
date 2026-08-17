@@ -38,5 +38,15 @@ class Property(db.Model):
 
         return self.annual_rent - self.annual_interest_cost
 
+    @property
+    def ltv(self):
+        if not self.mortgage_balance or not self.current_value:
+            return None
+
+        return (
+            self.mortgage_balance /
+            self.current_value * 100
+        )
+
     def __repr__(self):
         return f"<Property {self.name}>"

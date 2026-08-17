@@ -97,6 +97,26 @@
             </tr>
 
             <tr>
+
+                <th>Loan To Value (LTV)</th>
+
+                <td>
+
+                    {% if property.ltv is not none %}
+
+                    {{ "%.2f"|format(property.ltv) }}%
+
+                        {% else %}
+
+                            —
+
+                        {% endif %}
+
+                </td>
+
+            </tr>
+
+            <tr>
                 <th>Interest Rate</th>
                 <td>
                     {% if property.interest_rate is not none %}

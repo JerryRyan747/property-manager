@@ -17,6 +17,14 @@ def portfolio_summary():
     )
 
     total_gain = total_current - total_purchase
+    total_mortgage = sum(
+        p.mortgage_balance or 0
+        for p in properties
+    )
+
+    total_equity = (
+        total_current - total_mortgage
+    )
     total_annual_rent = sum(
     p.annual_rent if p.annual_rent else 0
     for p in properties
@@ -72,6 +80,12 @@ def portfolio_summary():
 
         "portfolio_ltv": portfolio_ltv,
 
+        "total_mortgage": total_mortgage,
+        
+        "total_equity": total_equity,
+
         "latest": latest
+
+        
 
     }
