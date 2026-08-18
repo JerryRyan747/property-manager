@@ -49,12 +49,14 @@ def home():
 def property_detail(property_id):
 
     property = Property.query.get_or_404(property_id)
+    summary = portfolio_summary()
 
     return render_template(
 
         "property_detail.html",
 
-        property=property
+        property=property,
+        summary=summary
 
     )
 
@@ -64,8 +66,10 @@ def add_property():
 
     current_value = request.form.get("current_value")
     annual_rent = request.form.get("annual_rent")
+    annual_expenses = request.form.get("annual_expenses")
     mortgage_balance = request.form.get("mortgage_balance")
     interest_rate = request.form.get("interest_rate")
+    mortgage_term = request.form.get("mortgage_term")
 
     property = Property(
 
@@ -79,10 +83,13 @@ def add_property():
 
         annual_rent=float(annual_rent) if annual_rent else None,
 
+        annual_expenses=float(annual_expenses) if annual_expenses else None,
+
         mortgage_balance=float(mortgage_balance) if mortgage_balance else None,
 
-        interest_rate=float(interest_rate) if interest_rate else None
-     
+        interest_rate=float(interest_rate) if interest_rate else None,
+
+        mortgage_term=int(mortgage_term) if mortgage_term else None
     )
 
     db.session.add(property)
@@ -118,11 +125,15 @@ def edit_property(property_id):
         annual_rent = request.form.get("annual_rent")
         mortgage_balance = request.form.get("mortgage_balance")
         interest_rate = request.form.get("interest_rate")
+        annual_expenses = request.form.get("annual_expenses")
+        mortgage_term = request.form.get("mortgage_term")
 
         property.current_value = float(current_value) if current_value else None
         property.annual_rent = float(annual_rent) if annual_rent else None
+        property.annual_expenses=float(annual_expenses) if annual_expenses else None
         property.mortgage_balance = float(mortgage_balance) if mortgage_balance else None
         property.interest_rate = float(interest_rate) if interest_rate else None
+        property.mortgage_term = int(mortgage_term) if mortgage_term else None
 
         
         db.session.commit()

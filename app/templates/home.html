@@ -88,6 +88,17 @@ Dashboard
 <div class="col-md-2">
     <div class="card text-center shadow-sm">
         <div class="card-body">
+            <h6 class="text-muted">Net Cash Flow</h6>
+            <h3>
+                £{{ "{:,.0f}".format(summary.total_net_cash_flow) }}
+            </h3>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-2">
+    <div class="card text-center shadow-sm">
+        <div class="card-body">
             <h6 class="text-muted">Mortgage Debt</h6>
             <h3>
                 £{{ "{:,.0f}".format(summary.total_mortgage) }}
@@ -140,6 +151,26 @@ Dashboard
     </div>
 </div>
 
+<div class="col-md-3">
+    <div class="card text-center shadow-sm">
+        <div class="card-body">
+
+            <h6 class="text-muted">
+                Debt Maturing Within 5 Years
+            </h6>
+
+            <h3>
+                £{{ "{:,.0f}".format(summary.refinancing_exposure_5yr) }}
+            </h3>
+
+            <p class="text-muted mb-0">
+                {{ "{:.2f}".format(summary.refinancing_exposure_5yr_pct) }}%
+                of Total Mortgage Debt
+            </p>
+
+        </div>
+    </div>
+</div>
 </div>
 
 <div class="card mb-4">
@@ -221,6 +252,15 @@ Dashboard
                                 class="form-control"
                                 name="annual_rent">
                     </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Annual Expenses</label>
+                        <input type="number"
+                                step="0.01"
+                                class="form-control"
+                                name="annual_expenses">
+                    </div>
+
                     <div class="mb-3">
                         <label class="form-label">Mortgage Balance</label>
                         <input type="number"
@@ -236,6 +276,17 @@ Dashboard
                             class="form-control"
                             name="interest_rate">
                     </div>
+
+
+                    <div class="mb-3">
+                        <label class="form-label">Mortgage Term (Years)</label>
+                        <input type="number"
+                        step="1"
+                        min="0"
+                        class="form-control"
+                        name="mortgage_term">
+                    </div>
+
                 
                 </div>
 
@@ -458,5 +509,175 @@ if (ctx) {
 }
 
 </script>
+
+<div class="card mt-4 shadow-sm">
+
+    <div class="card-header">
+        <h5 class="mb-0">Property Cash Flow</h5>
+    </div>
+
+    <div class="card-body">
+
+        <div class="table-responsive">
+
+            <table class="table table-hover align-middle">
+
+                <thead>
+                    <tr>
+                        <th>Property</th>
+                        <th>Annual Rent</th>
+                        <th>Mortgage Interest</th>
+                        <th>Expenses</th>
+                        <th>Net Cash Flow</th>
+                        <th>Cash Flow Yield</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for property in properties %}
+
+                    <tr>
+
+                        <td>
+                            <a href="{{ url_for('main.property_detail',
+                                               property_id=property.id) }}">
+                                {{ property.name }}
+                            </a>
+                        </td>
+
+                        <td>
+                            £{{ "{:,.0f}".format(property.annual_rent or 0) }}
+                        </td>
+
+                        <td>
+                            £{{ "{:,.0f}".format(property.annual_interest_cost or 0) }}
+                        </td>
+
+                        <td>
+                            £{{ "{:,.0f}".format(property.annual_expenses or 0) }}
+                        </td>
+
+                        <td>
+                            {% if property.net_cash_flow >= 0 %}
+
+                                <span class="text-success fw-bold">
+                                    £{{ "{:,.0f}".format(property.net_cash_flow) }}
+                                </span>
+
+                            {% else %}
+
+                                <span class="text-danger fw-bold">
+                                    £{{ "{:,.0f}".format(property.net_cash_flow) }}
+                                </span>
+
+                            {% endif %}
+                        </td>
+
+                        <td>
+
+                            {% if property.cash_flow_yield >= 0 %}
+
+                                <span class="fw-bold">
+
+                                    {{ "{:.2f}".format(property.cash_flow_yield) }}%
+
+                                </span>
+
+                            {% else %}
+
+                                —
+
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="card mt-4 shadow-sm">
+
+    <div class="card-header">
+        <h5 class="mb-0">Mortgage Maturity</h5>
+    </div>
+
+    <div class="card-body">
+
+        <table class="table table-hover">
+
+            <thead>
+                <tr>
+                    <th>Maturity Year</th>
+                    <th>Years Remaining</th>
+                    <th>Mortgage Debt Maturing</th>
+                    <th>Refinancing Status</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for year, amount in summary.maturity_by_year.items() %}
+                <tr>
+
+                    <td>
+                        {{ year }}
+                    </td>
+
+                        <td>
+                            {% set years_remaining = year - summary.current_year %}
+
+                            {{ years_remaining }}
+                        </td>
+
+                        <td>
+                            £{{ "{:,.0f}".format(amount) }}
+                        </td>
+
+                        <td>
+
+                            {% if years_remaining <= 2 %}
+
+                        <span class="badge bg-danger">
+                            Refinancing Priority
+                        </span>
+
+                        {% elif years_remaining <= 5 %}
+
+                        <span class="badge bg-warning text-dark">
+                            Plan Refinancing
+                        </span>
+
+                            {% else %}
+
+                        <span class="badge bg-success">
+                            No Immediate Action
+                        </span>
+
+                            {% endif %}
+
+                        </td>
+
+                </tr>
+                
+                    {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
 
 {% endblock %}

@@ -135,6 +135,89 @@
             </tr>
 
             <tr>
+                <th>Mortgage Term</th>
+
+                <td>
+
+                    {% if property.mortgage_term is not none %}
+
+                    {{ property.mortgage_term }} years
+
+                    {% else %}
+
+                        —
+
+                    {% endif %}
+
+                </td>
+            </tr>
+
+            <tr>
+                <th>Mortgage Maturity</th>
+
+                <td>
+
+                    {% if property.mortgage_maturity_year is not none %}
+
+                    {% set years_remaining = property.mortgage_maturity_year - summary.current_year %}
+
+            <div>
+                <strong>
+                    {{ property.mortgage_maturity_year }}
+                </strong>
+                <span class="text-muted">
+                    ({{ years_remaining }} years remaining)
+                </span>
+            </div>
+
+            {% if years_remaining <= 2 %}
+
+                <span class="badge bg-danger mt-1">
+                    Refinancing Priority
+                </span>
+
+            {% elif years_remaining <= 5 %}
+
+                <span class="badge bg-warning text-dark mt-1">
+                    Plan Refinancing
+                </span>
+
+            {% else %}
+
+                <span class="badge bg-success mt-1">
+                    No Immediate Action
+                </span>
+
+                    {% endif %}
+
+                    {% else %}
+
+                         —
+
+                    {% endif %}
+
+                </td>
+            </tr>
+
+            <tr>
+
+                <th>Annual Expenses</th>
+
+                <td> {% if property.annual_expenses is not none %}
+
+                    £{{ "{:,.2f}".format(property.annual_expenses) }}
+
+                    {% else %}
+
+                         —
+
+                    {% endif %}
+
+                </td>
+
+            </tr>
+
+            <tr>
 
                 <th>Net Rental Income</th>
 

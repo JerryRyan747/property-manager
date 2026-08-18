@@ -1,4 +1,6 @@
+from collections import defaultdict
 from app.models.property import Property
+from datetime import datetime
 
 def portfolio_summary():
 
@@ -37,6 +39,34 @@ def portfolio_summary():
 
     total_net_rental_income = (
     total_annual_rent - total_interest
+    )
+
+    total_expenses = sum(
+    p.annual_expenses or 0
+    for p in properties
+    )
+
+    total_net_cash_flow = (
+    total_net_rental_income - total_expenses
+    )
+
+    current_year = datetime.now().year
+    maturity_by_year = defaultdict(float)
+
+    for p in properties:
+        if p.mortgage_balance and p.mortgage_maturity_year:
+            maturity_by_year[p.mortgage_maturity_year] += p.mortgage_balance
+
+    refinancing_exposure_5yr = sum(
+    amount
+    for year, amount in maturity_by_year.items()
+        if year <= current_year + 5
+    )
+
+    refinancing_exposure_5yr_pct = (
+    refinancing_exposure_5yr / total_mortgage * 100
+    if total_mortgage
+    else 0
     )
 
     net_yield = (
@@ -103,6 +133,18 @@ def portfolio_summary():
         "total_net_rental_income": total_net_rental_income,
 
         "net_yield": net_yield,
+
+        "total_expenses": total_expenses,
+
+        "total_net_cash_flow": total_net_cash_flow,
+
+        "maturity_by_year": dict(sorted(maturity_by_year.items())),
+
+        "current_year": current_year,
+
+        "refinancing_exposure_5yr": refinancing_exposure_5yr,
+
+        "refinancing_exposure_5yr_pct": refinancing_exposure_5yr_pct,
 
         "latest": latest
 

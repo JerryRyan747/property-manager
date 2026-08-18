@@ -10,8 +10,19 @@ class Property(db.Model):
     purchase_price = db.Column(db.Float, nullable=False)
     current_value = db.Column(db.Float)
     annual_rent = db.Column(db.Float)
+    annual_expenses = db.Column(db.Float)
     mortgage_balance = db.Column(db.Float)
     interest_rate = db.Column(db.Float)
+    mortgage_term = db.Column(db.Integer)
+
+    @property
+    def mortgage_maturity_year(self):
+        if self.mortgage_term is None:
+            return None
+
+        from datetime import datetime
+
+        return datetime.now().year + self.mortgage_term
 
     created_at = db.Column(db.DateTime, server_default=db.func.now())
 
@@ -37,6 +48,26 @@ class Property(db.Model):
             return 0
 
         return self.annual_rent - self.annual_interest_cost
+
+    @property
+    def net_cash_flow(self):
+        if not self.annual_rent:
+            return 0
+
+        return (
+        self.annual_rent - self.annual_interest_cost - (self.annual_expenses or 0)
+        )
+
+    @property
+    def cash_flow_yield(self):
+        if not self.current_value:
+            return 0
+
+        return (
+            self.net_cash_flow
+            / self.current_value
+            * 100
+        )
 
     @property
     def ltv(self):
