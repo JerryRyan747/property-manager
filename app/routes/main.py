@@ -69,6 +69,7 @@ def add_property():
     annual_expenses = request.form.get("annual_expenses")
     mortgage_balance = request.form.get("mortgage_balance")
     interest_rate = request.form.get("interest_rate")
+    mortgage_type = request.form.get("mortgage_type")
     mortgage_term = request.form.get("mortgage_term")
 
     property = Property(
@@ -89,7 +90,9 @@ def add_property():
 
         interest_rate=float(interest_rate) if interest_rate else None,
 
-        mortgage_term=int(mortgage_term) if mortgage_term else None
+        mortgage_term=int(mortgage_term) if mortgage_term else None,
+
+        mortgage_type=mortgage_type
     )
 
     db.session.add(property)
@@ -126,6 +129,7 @@ def edit_property(property_id):
         mortgage_balance = request.form.get("mortgage_balance")
         interest_rate = request.form.get("interest_rate")
         annual_expenses = request.form.get("annual_expenses")
+        mortgage_type = request.form.get("mortgage_type")
         mortgage_term = request.form.get("mortgage_term")
 
         property.current_value = float(current_value) if current_value else None
@@ -134,6 +138,7 @@ def edit_property(property_id):
         property.mortgage_balance = float(mortgage_balance) if mortgage_balance else None
         property.interest_rate = float(interest_rate) if interest_rate else None
         property.mortgage_term = int(mortgage_term) if mortgage_term else None
+        property.mortgage_type = mortgage_type
 
         
         db.session.commit()

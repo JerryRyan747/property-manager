@@ -77,6 +77,34 @@ Dashboard
 <div class="col-md-2">
     <div class="card text-center shadow-sm">
         <div class="card-body">
+            <h6 class="text-muted">Principal Repayment</h6>
+            <h3>
+                £{{ "{:,.0f}".format(summary.total_principal_repayment) }}
+            </h3>
+            <p class="text-muted mb-0">
+                Debt Reduction
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-2">
+    <div class="card text-center shadow-sm">
+        <div class="card-body">
+            <h6 class="text-muted">Total Mortgage Payments</h6>
+            <h3>
+                £{{ "{:,.0f}".format(summary.total_mortgage_payments) }}
+            </h3>
+            <p class="text-muted mb-0">
+                Interest + Principal
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-2">
+    <div class="card text-center shadow-sm">
+        <div class="card-body">
             <h6 class="text-muted">Net Rental Income</h6>
             <h3>
                 £{{ "{:,.0f}".format(summary.total_net_rental_income) }}
@@ -287,8 +315,30 @@ Dashboard
                         name="mortgage_term">
                     </div>
 
-                
+                    <div class="mb-3">
+
+                        <label class="form-label">
+                            Mortgage Type
+                        </label>
+
+                        <select
+                            class="form-select"
+                            name="mortgage_type">
+
+                        <option value="interest_only">
+                            Interest Only
+                        </option>
+
+                        <option value="repayment">
+                            Repayment
+                        </option>
+
+                        </select>
+
                 </div>
+
+                
+        </div>
 
                 <div class="modal-footer">
 
@@ -354,9 +404,11 @@ Dashboard
             <th>Purchase Price</th>
             <th>Current Value</th>
             <th>Annual Rent</th>
-            <th>Yield %</th>
-            <th>Mortgage</th>
-            <th>Equity</th>
+            <th>Yield %</th>                     
+            <th>Mortgage Type</th> 
+            <th>Mortgage</th> 
+            <th>Annual Payment</th>
+            <th>Equity</th> 
             <th>Actions</th>
 
         </tr>
@@ -407,9 +459,30 @@ Dashboard
                     —
                 {% endif %}
             </td>
+
+            <td>
+                {% if property.mortgage_type == "repayment" %}
+                <span class="badge bg-primary">
+                    Repayment
+                </span>
+                {% else %}
+                <span class="badge bg-secondary">
+                    Interest Only
+                </span>
+                {% endif %}
+            </td>
+
             <td>
                 {% if property.mortgage_balance %}
                 £{{ "{:,.2f}".format(property.mortgage_balance) }}
+                {% else %}
+                    —
+                {% endif %}
+            </td>
+                        
+            <td>
+                {% if property.annual_mortgage_payment %}
+                £{{ "{:,.2f}".format(property.annual_mortgage_payment) }}
                 {% else %}
                     —
                 {% endif %}
@@ -527,6 +600,8 @@ if (ctx) {
                         <th>Property</th>
                         <th>Annual Rent</th>
                         <th>Mortgage Interest</th>
+                        <th>Principal Repayment</th>
+                        <th>Total Mortgage Payment</th>
                         <th>Expenses</th>
                         <th>Net Cash Flow</th>
                         <th>Cash Flow Yield</th>
@@ -555,8 +630,16 @@ if (ctx) {
                         </td>
 
                         <td>
-                            £{{ "{:,.0f}".format(property.annual_expenses or 0) }}
+                            £{{ "{:,.0f}".format(property.annual_principal_repayment or 0) }}
                         </td>
+
+                        <td>
+                            £{{ "{:,.0f}".format(property.annual_mortgage_payment or 0) }}
+                        </td>
+
+                        <td>
+                            £{{ "{:,.0f}".format(property.annual_expenses or 0) }}
+                        </td>                                             
 
                         <td>
                             {% if property.net_cash_flow >= 0 %}
@@ -575,21 +658,19 @@ if (ctx) {
                         </td>
 
                         <td>
-
                             {% if property.cash_flow_yield >= 0 %}
 
-                                <span class="fw-bold">
-
-                                    {{ "{:.2f}".format(property.cash_flow_yield) }}%
-
-                                </span>
+                            <span class="text-success fw-bold">
+                                {{ "{:.2f}".format(property.cash_flow_yield) }}%
+                            </span>
 
                             {% else %}
 
-                                —
+                            <span class="text-danger fw-bold">
+                                {{ "{:.2f}".format(property.cash_flow_yield) }}%
+                            </span>
 
                             {% endif %}
-
                         </td>
 
                     </tr>

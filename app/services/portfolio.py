@@ -37,6 +37,16 @@ def portfolio_summary():
     for p in properties
     )
 
+    total_principal_repayment = sum(
+        p.annual_principal_repayment
+        for p in properties
+    )
+
+    total_mortgage_payments = sum(
+        p.annual_mortgage_payment
+        for p in properties
+    )
+
     total_net_rental_income = (
     total_annual_rent - total_interest
     )
@@ -47,7 +57,9 @@ def portfolio_summary():
     )
 
     total_net_cash_flow = (
-    total_net_rental_income - total_expenses
+        total_annual_rent
+        - total_expenses
+        - total_mortgage_payments
     )
 
     current_year = datetime.now().year
@@ -129,6 +141,10 @@ def portfolio_summary():
         "total_equity": total_equity,
 
         "total_interest": total_interest,
+
+        "total_principal_repayment": total_principal_repayment,
+
+        "total_mortgage_payments": total_mortgage_payments,
 
         "total_net_rental_income": total_net_rental_income,
 

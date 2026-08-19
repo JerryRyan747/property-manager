@@ -14,6 +14,10 @@ class Property(db.Model):
     mortgage_balance = db.Column(db.Float)
     interest_rate = db.Column(db.Float)
     mortgage_term = db.Column(db.Integer)
+    mortgage_type = db.Column(
+    db.String(20),
+    default="interest_only"
+    )
 
     @property
     def mortgage_maturity_year(self):
@@ -41,6 +45,49 @@ class Property(db.Model):
             self.mortgage_balance *
             self.interest_rate / 100
         )
+
+    @property
+    def monthly_mortgage_payment(self):
+        if (
+            self.mortgage_type != "repayment"
+            or not self.mortgage_balance
+            or self.interest_rate is None
+            or self.mortgage_term is None
+            or self.mortgage_term <= 0
+        ):
+            return 0
+
+        monthly_rate = self.interest_rate / 100 / 12
+        number_of_payments = self.mortgage_term * 12
+
+        if monthly_rate == 0:
+            return self.mortgage_balance / number_of_payments
+
+        return (
+            self.mortgage_balance
+            * monthly_rate
+            * (1 + monthly_rate) ** number_of_payments
+            / ((1 + monthly_rate) ** number_of_payments - 1)
+        )
+
+    @property
+    def annual_mortgage_payment(self):
+        if self.mortgage_type == "repayment":
+            return self.monthly_mortgage_payment * 12
+
+        return self.annual_interest_cost
+
+    @property
+    def annual_principal_repayment(self):
+        if self.mortgage_type != "repayment":
+            return 0
+
+        principal = (
+        self.annual_mortgage_payment
+        - self.annual_interest_cost
+)
+
+        return max(principal, 0)
  
     @property
     def net_rental_income(self):
@@ -55,9 +102,12 @@ class Property(db.Model):
             return 0
 
         return (
-        self.annual_rent - self.annual_interest_cost - (self.annual_expenses or 0)
-        )
+            self.annual_rent
+            - self.annual_mortgage_payment
+            - (self.annual_expenses or 0)
+            )
 
+    
     @property
     def cash_flow_yield(self):
         if not self.current_value:

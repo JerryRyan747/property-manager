@@ -86,6 +86,26 @@
             </tr>
 
             <tr>
+
+                <th>Mortgage Type</th>
+
+                <td>
+
+                    {% if property.mortgage_type == "repayment" %}
+
+                        Repayment
+
+                        {% else %}
+
+                        Interest Only
+
+                        {% endif %}
+
+                </td>
+
+            </tr>
+
+            <tr>
                 <th>Mortgage Balance</th>
                 <td>
                     {% if property.mortgage_balance %}
@@ -132,6 +152,20 @@
                 <td>
                     £{{ "{:,.2f}".format(property.annual_interest_cost) }}
                 </td>
+            </tr>
+
+            <tr>
+                <th>Annual Principal Repayment</th>
+                    <td>
+                        £{{ "{:,.2f}".format(property.annual_principal_repayment) }}
+                    </td>
+            </tr>
+
+            <tr>
+                <th>Total Annual Mortgage Payment</th>
+                    <td>
+                        £{{ "{:,.2f}".format(property.annual_mortgage_payment) }}
+                    </td>
             </tr>
 
             <tr>
@@ -225,6 +259,50 @@
                     £{{ "{:,.2f}".format(property.net_rental_income) }}
                 </td>
 
+            </tr>
+
+            <tr>
+                <th>Net Cash Flow</th>
+
+                <td>
+
+                    {% if property.net_cash_flow >= 0 %}
+
+                    <span class="text-success fw-bold">
+                        £{{ "{:,.2f}".format(property.net_cash_flow) }}
+                    </span>
+
+                    {% else %}
+
+                    <span class="text-danger fw-bold">
+                        £{{ "{:,.2f}".format(property.net_cash_flow) }}
+                    </span>
+
+                    {% endif %}
+
+                </td>
+            </tr>
+
+            <tr>
+                <th>Cash Flow Yield</th>
+
+                <td>
+
+                    {% if property.cash_flow_yield >= 0 %}
+
+                    <span class="text-success fw-bold">
+                        {{ "{:.2f}".format(property.cash_flow_yield) }}%
+                    </span>
+
+                    {% else %}
+
+                    <span class="text-danger fw-bold">
+                        {{ "{:.2f}".format(property.cash_flow_yield) }}%
+                    </span>
+
+                    {% endif %}
+
+                </td>
             </tr>
 
             <tr>

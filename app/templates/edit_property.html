@@ -135,6 +135,34 @@
             value="{{ property.mortgage_term or '' }}">
     </div>
 
+    <div class="mb-3">
+
+        <label class="form-label">
+            Mortgage Type
+        </label>
+
+        <select
+            class="form-select"
+            name="mortgage_type">
+
+        <option value="interest_only"
+            {% if property.mortgage_type == "interest_only" %}
+                selected
+            {% endif %}>
+            Interest Only
+        </option>
+
+        <option value="repayment"
+            {% if property.mortgage_type == "repayment" %}
+                selected
+            {% endif %}>
+            Repayment
+        </option>
+
+        </select>
+
+    </div>
+
     <button type="submit" class="btn btn-success">
 
         Save Changes
