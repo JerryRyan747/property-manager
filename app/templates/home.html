@@ -537,51 +537,6 @@ Dashboard
 
 {% endif %}
 
-{% endblock %}
-
-{% block scripts %}
-
-<script>
-
-const ctx = document.getElementById('portfolioChart');
-
-if (ctx) {
-
-    new Chart(ctx, {
-
-        type: 'bar',
-
-        data: {
-
-            labels: ['Purchase', 'Current'],
-
-            datasets: [{
-
-                label: 'Portfolio (£)',
-
-                data: [
-
-                    {{ summary.total_purchase|default(0) }},
-
-                    {{ summary.total_current|default(0) }}
-
-                ]
-
-            }]
-
-        },
-
-        options: {
-
-            responsive: true
-
-        }
-
-    });
-
-}
-
-</script>
 
 <div class="card mt-4 shadow-sm">
 
@@ -760,5 +715,170 @@ if (ctx) {
     </div>
 
 </div>
+
+<div class="card mt-4 shadow-sm">
+
+    <div class="card-header">
+        <h5 class="mb-0">Portfolio Debt Forecast</h5>
+    </div>
+
+    <div class="card-body">
+
+        <div class="table-responsive">
+
+            <table class="table table-hover table-sm">
+
+                <thead>
+
+                    <tr>
+                        <th>Year</th>
+                        <th>Opening Debt</th>
+                        <th>Interest</th>
+                        <th>Principal Repaid</th>
+                        <th>Mortgage Payments</th>
+                        <th>Closing Debt</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {% for row in summary.debt_forecast %}
+
+                    <tr>
+
+                        <td>{{ row.year }}</td>
+
+                        <td>
+                            £{{ "{:,.0f}".format(row.opening_debt) }}
+                        </td>
+
+                        <td>
+                            £{{ "{:,.0f}".format(row.interest) }}
+                        </td>
+
+                        <td>
+                            £{{ "{:,.0f}".format(row.principal) }}
+                        </td>
+
+                        <td>
+                            £{{ "{:,.0f}".format(row.payments) }}
+                        </td>
+
+                        <td>
+                            £{{ "{:,.0f}".format(row.closing_debt) }}
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="card mt-4 shadow-sm">
+
+    <div class="card-header">
+        <h5 class="mb-0">
+            Portfolio Debt Reduction
+        </h5>
+    </div>
+
+    <div class="card-body">
+
+        <canvas id="debtForecastChart"></canvas>
+
+    </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const debtCtx = document.getElementById("debtForecastChart");
+
+    console.log("Debt canvas =", debtCtx);
+    console.log("Debt forecast =", {{ summary.debt_forecast | tojson }});
+
+    if (debtCtx) {
+
+        new Chart(debtCtx, {
+
+            type: "line",
+
+            data: {
+
+                labels: {{ summary.debt_forecast
+                    | map(attribute="year")
+                    | list
+                    | tojson }},
+
+                datasets: [
+                    {
+                        label: "Closing Mortgage Debt",
+                        data: {{ summary.debt_forecast
+                            | map(attribute="closing_debt")
+                            | list
+                            | tojson }},
+                        tension: 0.3,
+                        fill: false
+                    },
+                    {
+                        label: "Portfolio Equity",
+                        data: {{ summary.debt_forecast
+                            | map(attribute="equity")
+                            | list
+                            | tojson }},
+                        tension: 0.3,
+                        fill: false
+                    }
+                ]
+            },
+
+            options: {
+
+                responsive: true,
+
+                scales: {
+
+                    y: {
+
+                        beginAtZero: false,
+
+                        ticks: {
+
+                            callback: function(value) {
+
+                                return "£" +
+                                    value.toLocaleString();
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        });
+
+    }
+
+});
+
+</script>
 
 {% endblock %}

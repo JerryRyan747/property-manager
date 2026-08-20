@@ -312,6 +312,74 @@
 
         </table>
 
+        {% if property.mortgage_type == "repayment" %}
+
+<div class="card mt-4 shadow-sm">
+
+    <div class="card-header">
+        <h5 class="mb-0">Mortgage Amortisation Forecast</h5>
+    </div>
+
+    <div class="card-body">
+
+        <div class="table-responsive">
+
+            <table class="table table-hover align-middle">
+
+                <thead>
+                    <tr>
+                        <th>Year</th>
+                        <th>Interest</th>
+                        <th>Principal Repaid</th>
+                        <th>Mortgage Payment</th>
+                        <th>Closing Balance</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for year in property.amortisation_schedule() %}
+
+                    <tr>
+
+                        <td>
+                            {{ year.year }}
+                        </td>
+
+                        <td>
+                            £{{ "{:,.0f}".format(year.interest) }}
+                        </td>
+
+                        <td>
+                            £{{ "{:,.0f}".format(year.principal) }}
+                        </td>
+
+                        <td>
+                            £{{ "{:,.0f}".format(
+                                property.annual_mortgage_payment
+                            ) }}
+                        </td>
+
+                        <td>
+                            £{{ "{:,.0f}".format(year.balance) }}
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endif %}
+
     </div>
 
 </div>

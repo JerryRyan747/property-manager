@@ -34,6 +34,15 @@ def home():
     properties = query.order_by(Property.name).all()
 
     summary = portfolio_summary()
+    forecast_years = [
+    row["year"]
+    for row in summary["debt_forecast"]
+    ]
+
+    forecast_debt = [
+    row["closing_debt"]
+    for row in summary["debt_forecast"]
+    ]
 
     return render_template(
 
@@ -41,7 +50,11 @@ def home():
 
         properties=properties,
 
-        summary=summary
+        summary=summary,
+
+        forecast_years=forecast_years,
+
+        forecast_debt=forecast_debt
 
     )
 @main.route("/property/<int:property_id>")

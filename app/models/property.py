@@ -119,6 +119,52 @@ class Property(db.Model):
             * 100
         )
 
+    def amortisation_schedule(self):
+
+        if (
+            self.mortgage_type != "repayment"
+            or not self.mortgage_balance
+            or not self.interest_rate
+            or not self.mortgage_term
+        ):
+            return []
+
+        balance = self.mortgage_balance
+
+        annual_rate = self.interest_rate / 100
+        monthly_rate = annual_rate / 12
+
+        months = self.mortgage_term * 12
+
+        payment = self.monthly_mortgage_payment
+
+        schedule = []
+
+        for year in range(1, self.mortgage_term + 1):
+
+            interest_paid = 0
+            principal_paid = 0
+
+            for _ in range(12):
+
+                interest = balance * monthly_rate
+
+                principal = payment - interest
+
+                balance -= principal
+
+                interest_paid += interest
+                principal_paid += principal
+
+            schedule.append({
+                "year": year,
+                "balance": max(balance, 0),
+                "interest": interest_paid,
+                "principal": principal_paid
+            })
+
+        return schedule   
+
     @property
     def ltv(self):
         if not self.mortgage_balance or not self.current_value:
